@@ -1,12 +1,25 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useMemo } from 'react';
 import api from '../../services/api';
+import socketio from 'socket.io-client';
 
 import './styles.css';
 
 export function Dashboard(){
     const [spots, setSpots ] = useState([])
     const preview = 'http://localhost:3335/files';
+    
+    const user_id = localStorage.getItem('user');
+    const socket = useMemo( ()=> socketio('http://localhost:3335',{
+        query: { user_id }
+    }),[user_id])
+    
+    useEffect( () => {
+        console.log('socket: ', socket);
+        console.log('socket conectado', socket.connected)
+    },[socket])
+
+
     useEffect( () => {
         async function loadSpots(){
             const user_id = localStorage.getItem('user');
